@@ -4,6 +4,7 @@ import com.juan.rosas.grpc.grpcintro.BalanceCheckRequest;
 import com.juan.rosas.grpc.grpcintro.BankServiceGrpc;
 import io.grpc.stub.StreamObserver;
 
+//Provide implementation to the protobuf method
 public class BankService extends BankServiceGrpc.BankServiceImplBase {
     @Override
     public void getBalance(BalanceCheckRequest request, StreamObserver<Balance> responseObserver) {

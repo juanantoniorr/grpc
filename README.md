@@ -5,5 +5,6 @@ src/main/proto
 # Modify proto files
  - 1 make your changes
  - 2 mvn compile
-
+# Proto generated files path
+ - target/generated-sources
 
