@@ -22,6 +22,7 @@ public class GrpcBankClientTest {
     public void setUp() throws IOException, InterruptedException {
         //Creating server
         Server server =  ServerBuilder.forPort(6565)
+                //Important to add the service that extends grpc base impl
                 .addService(new BankService())
                 .build();
 
@@ -31,7 +32,7 @@ public class GrpcBankClientTest {
                 .usePlaintext()
                 .build();
 
-       //Blocking stub 
+       //Blocking stub
        blockingStub =  BankServiceGrpc.newBlockingStub(managedChannel);
 
     }
