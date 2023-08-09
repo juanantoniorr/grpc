@@ -20,11 +20,11 @@ public class AccountDatabase {
         return MAP.get(accountId);
     }
 
-    public static int addBalance(int accountId, int amount) {
+    public static Integer addBalance(int accountId, int amount) {
         return MAP.computeIfPresent(accountId, (k,v) -> v + amount);
     }
 
-    public static int deductBalance(int accountId, int amount){
+    public static Integer deductBalance(int accountId, int amount){
         return MAP.computeIfPresent(accountId, (k,v) -> v - amount);
 
     }

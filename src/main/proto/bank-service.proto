@@ -10,7 +10,18 @@ message Balance {
   int32 amount = 1;
 }
 
+message WithdrawRequest {
+  int32 accountNumber = 1;
+  int32 amount = 2;
+    }
+message Money{
+  int32 value = 1;
+}
+
 service BankService {
-  //rpc defines a method
+  //rpc defining unary method
   rpc getBalance(BalanceCheckRequest) returns (Balance);
+
+  //server side streaming
+  rpc withdraw(WithdrawRequest) returns (stream Money);
 }
