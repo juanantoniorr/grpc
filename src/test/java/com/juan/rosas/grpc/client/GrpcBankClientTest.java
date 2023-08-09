@@ -3,6 +3,7 @@ package com.juan.rosas.grpc.client;
 import com.juan.rosas.grpc.grpcintro.Balance;
 import com.juan.rosas.grpc.grpcintro.BalanceCheckRequest;
 import com.juan.rosas.grpc.grpcintro.BankServiceGrpc;
+import com.juan.rosas.grpc.grpcintro.WithdrawRequest;
 import com.juan.rosas.grpc.server.BankService;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -44,6 +45,34 @@ public class GrpcBankClientTest {
                 .build());
         System.out.println(balance);
        assert balance.getAmount() == 50;
+    }
+
+    @Test
+    public void withdrawTest(){
+
+        //Given: Account 7 has 70 dollars as default
+        final int total = 0;
+        WithdrawRequest withdrawRequest = WithdrawRequest.newBuilder().setAccountNumber(7)
+                .setAmount(40)
+                .build();
+
+        //When: We withdraw 40 -> WithdrawRequest
+        blockingStub.withdraw(withdrawRequest)
+               .forEachRemaining(money -> {
+                   //Every chunk 10 dollars
+                   assert money.getValue() == 10;
+               });
+        BalanceCheckRequest balanceCheckRequest = BalanceCheckRequest.newBuilder()
+                .setAccountNumber(7)
+                .build();
+        //Then we should have 30 dollars left
+        assert blockingStub.getBalance(balanceCheckRequest).getAmount() == 30;
+
+
+
+
+
+
     }
 
 }
