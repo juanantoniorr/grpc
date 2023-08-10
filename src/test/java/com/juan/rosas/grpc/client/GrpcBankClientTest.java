@@ -1,5 +1,6 @@
 package com.juan.rosas.grpc.client;
 
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.juan.rosas.grpc.grpcintro.Balance;
 import com.juan.rosas.grpc.grpcintro.BalanceCheckRequest;
 import com.juan.rosas.grpc.grpcintro.BankServiceGrpc;
@@ -14,10 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GrpcBankClientTest {
     private BankServiceGrpc.BankServiceBlockingStub blockingStub;
+    private BankServiceGrpc.BankServiceStub bankServiceStub;
 
     @BeforeAll
     public void setUp() throws IOException, InterruptedException {
@@ -36,6 +40,9 @@ public class GrpcBankClientTest {
        //Blocking stub
        blockingStub =  BankServiceGrpc.newBlockingStub(managedChannel);
 
+       //Non-blocking stub. ASYNC
+        bankServiceStub = BankServiceGrpc.newStub(managedChannel);
+
     }
 
     @Test
@@ -51,7 +58,6 @@ public class GrpcBankClientTest {
     public void withdrawTest(){
 
         //Given: Account 7 has 70 dollars as default
-        final int total = 0;
         WithdrawRequest withdrawRequest = WithdrawRequest.newBuilder().setAccountNumber(7)
                 .setAmount(40)
                 .build();
@@ -67,10 +73,17 @@ public class GrpcBankClientTest {
                 .build();
         //Then we should have 30 dollars left
         assert blockingStub.getBalance(balanceCheckRequest).getAmount() == 30;
+    }
 
-
-
-
+    @Test
+    public void withdrawAsyncTest() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        WithdrawRequest withdrawRequest = WithdrawRequest.newBuilder().setAccountNumber(7)
+                .setAmount(30)
+                .build();
+        bankServiceStub.withdraw(withdrawRequest,new MoneyStreamingResponse(countDownLatch));
+        //IT IS ASYNC SO WE WAIT TO BE COMPLETED
+        countDownLatch.await();
 
 
     }
