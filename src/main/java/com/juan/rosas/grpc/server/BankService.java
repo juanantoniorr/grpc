@@ -17,7 +17,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 
     }
 
-    //STREAMING REQUEST
+    //STREAMING REQUEST SERVER SIDE -> SERVER RETURNS CHUNKS OF DATA
     @Override
     public void withdraw(WithdrawRequest request, StreamObserver<Money> responseObserver) {
         int accountNumber = request.getAccountNumber();
@@ -48,5 +48,10 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
         AccountDatabase.deductBalance(accountNumber, amount);
 
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public StreamObserver<DepositRequest> cashDeposit(StreamObserver<Balance> responseObserver) {
+        return new CashDepositStreamingRequest(responseObserver);
     }
 }
