@@ -1,9 +1,7 @@
 package com.juan.rosas.grpc.client;
 
-import com.google.common.util.concurrent.Uninterruptibles;
 import com.juan.rosas.grpc.grpcintro.*;
 import com.juan.rosas.grpc.server.BankService;
-import com.juan.rosas.grpc.server.CashDepositStreamingRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GrpcBankClientTest {

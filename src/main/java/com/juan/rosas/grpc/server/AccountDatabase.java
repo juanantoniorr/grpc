@@ -28,4 +28,8 @@ public class AccountDatabase {
         return MAP.computeIfPresent(accountId, (k,v) -> v - amount);
 
     }
+
+    public static void printAccountDetails() {
+        System.out.println(MAP);
+    }
 }
